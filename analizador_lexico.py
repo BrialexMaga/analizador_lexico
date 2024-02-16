@@ -43,6 +43,11 @@ class AnalizadorLexico:
         self.frame.pack(fill="x", expand=True)
 
     def analyze_lexical(self):
+        text = self.text_entry.get(1.0, "end").split()
+        for word in text:
+            token = Alfabeto.get_token(word)
+            self.tree.insert("", "end", values=(word, token, Alfabeto.get_token(token)))
+        
         # Ejemplo de insertar datos en Treeview
         self.tree.insert("", "end", values=("hola", "mundo", "cadena"))
 
@@ -51,7 +56,7 @@ class AnalizadorLexico:
 
         self.tree.heading('Lexema', text="Lexema")
         self.tree.heading('Token', text="Token")
-        self.tree.heading('Tipo', text="Tipo")
+        self.tree.heading('Tipo', text="#")
 
         self.tree.pack(pady=10, padx=10, fill="x", expand=True)
 
