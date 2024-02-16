@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 from alfabeto import Alfabeto
 
 class AnalizadorLexico:
@@ -19,7 +19,13 @@ class AnalizadorLexico:
         self.create_table()
 
     def open_file(self):
-        pass
+        file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
+
+        with open(file_path, "r") as file:
+            data = file.read()
+        
+        self.text_entry.delete(1.0, "end")
+        self.text_entry.insert(1.0, data)
 
 
     def create_texts_frame(self):
