@@ -28,11 +28,9 @@ tokens = (
 )
 
 # Expresiones regulares para los tokens
-t_IDENTIFICADOR = r'[a-zA-Z_][a-zA-Z_0-9]*'
 t_ENTERO = r'\d+'
 t_REAL = r'\d+\.\d+'
 t_CADENA = r'\".*\"'
-t_TIPO = r'int|float|void'
 t_OPSUMA = r'\+|-'
 t_OPMUL = r'\*|/'
 t_OPRELAC = r'<|>|<=|>=|==|!='
@@ -52,6 +50,16 @@ t_WHILE = r'while'
 t_RETURN = r'return'
 t_ELSE = r'else'
 t_SIGNODINERO = r'\$'
+
+def t_TIPO(t):
+    r'int|float|void'
+    return t
+
+def t_IDENTIFICADOR(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    if t.value in ['int', 'float', 'void']:
+        t.type = 'TIPO'
+    return t
 
 # Ignorar espacios y tabulaciones
 t_ignore = ' \t'
@@ -79,8 +87,12 @@ lexer = lex()
 data = """
 /* Esto es un comentario */
 // Esto es otro comentario
-3 + 4 * 10
-  + -20 *2
+int main() {
+    int a = 5;
+    int b = 10;
+    int c = a + b;
+    return c;
+}
 """
 
 # Give the lexer some input
