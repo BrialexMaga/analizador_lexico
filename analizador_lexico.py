@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog
-from alfabeto import Alfabeto
+from alfabeto import analyze_lexical
 
 class AnalizadorLexico:
     def __init__(self, root):
@@ -34,7 +34,7 @@ class AnalizadorLexico:
         self.text_entry = tk.Text(self.frame, width=54, height=15, font=("Arial", 10))
         self.text_entry.grid(row=0, column=0, columnspan=2, pady=10)
 
-        self.button = tk.Button(self.frame, text="Analizar Léxico", width=20, font=("Arial", 12), command=self.analyze_lexical)
+        self.button = tk.Button(self.frame, text="Analizar Léxico", width=20, font=("Arial", 12), command=self.call_analyze_lexical)
         self.button.grid(row=0, column=2, pady=10, padx=10)
 
         self.text_output = tk.Text(self.frame, width=54, height=15, font=("Arial", 10))
@@ -42,11 +42,14 @@ class AnalizadorLexico:
 
         self.frame.pack(fill="x", expand=True)
 
-    def analyze_lexical(self):
-        text = self.text_entry.get(1.0, "end").split()
-        for word in text:
-            token = Alfabeto.get_token(word)
-            self.tree.insert("", "end", values=(word, token, Alfabeto.get_token(word).value))
+    def call_analyze_lexical(self):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+        text = self.text_entry.get(1.0, "end")
+        tokens = analyze_lexical(text)
+        for word, token, token_value in tokens:
+            self.tree.insert("", "end", values=(word, token, token_value))
         
         # Ejemplo de insertar datos en Treeview
         #self.tree.insert("", "end", values=("hola", "mundo", "cadena"))
@@ -57,6 +60,10 @@ class AnalizadorLexico:
         self.tree.heading('Lexema', text="Lexema")
         self.tree.heading('Token', text="Token")
         self.tree.heading('Tipo', text="#")
+
+        self.tree.column('Lexema', anchor="center")
+        self.tree.column('Token', anchor="center")
+        self.tree.column('Tipo', anchor="center")
 
         self.tree.pack(pady=10, padx=10, fill="x", expand=True)
 
